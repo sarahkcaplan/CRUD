@@ -1,20 +1,19 @@
 get '/sessions/new' do
-  erb :'session/new'
+  erb :'sessions/new'
 end
 
 post '/sessions' do
-  @user = User.find(params[:email])
+  @user = User.find_by(email: params["user"]["email"])
   if @user && @user.password == params[:password]
-    session[:id] = @user.id
-    redirect "/users/#{@user.id}"
+    login(@logouuser)
+    redirect "/users/test"
   else
-    @errors = ["Incorrect username password combination"]
+    @errors = "Incorrect username password combination"
     erb :'sessions/new'
   end
 end
 
-get '/logout' do
+delete '/sessions' do
   logout
   redirect '/'
 end
-
